@@ -97,8 +97,8 @@ void loop()
           break;
         case 119:
           Input = 'w';
-          if(posS2 >= 60)
-            posS2 = 45;
+          if(posS2 >= 45)
+            posS2 = 30;
           posS2 +=15;
           servo_top.write(posS2);
           currentPosS2 = servo_top.read();
@@ -120,7 +120,7 @@ void loop()
         default:
           incomingByte = 0;
       }
-  
+      
       //Control the LEDs
       if(currentPosS2 == 0)
       {
@@ -146,17 +146,87 @@ void loop()
         digitalWrite(4, LOW);
         digitalWrite(5, LOW);
       }
-      else if(currentPosS2 == 60)
-      {
-        digitalWrite(3, HIGH);
-        digitalWrite(4, HIGH);
-        digitalWrite(5, HIGH);
-      }
     }
   }
   else if(structure == 50)
   {
-    Serial.println("You Selected the Character");
+    if(Serial.available() > 0)
+    {
+      incomingByte = Serial.read();
+  
+      //make the servo motors move
+      switch(incomingByte){
+        case 97:
+          Input = 'a';
+          if(posS1 >= 180)
+            posS1 = 170;
+          posS1 +=10;
+          servo_bottom.write(posS1);
+          currentPosS1 = servo_bottom.read();
+          Serial.println("I received: " + (String)Input);
+          Serial.println("Servo bottom position: " + (String)currentPosS1);
+          break;
+        case 100:
+          Input = 'd';
+          if(posS1 <= 0)
+            posS1 = 10;
+          posS1 -=10;
+          servo_bottom.write(posS1);
+          currentPosS1 = servo_bottom.read();
+          Serial.println("I received: " + (String)Input);
+          Serial.println("Servo bottom position: " + (String)currentPosS1);
+          break;
+        case 115:
+          Input = 's';
+          if(posS2 <= 0)
+            posS2 = 15;
+          posS2 -=15;
+          servo_top.write(posS2);
+          currentPosS2 = servo_top.read();
+          Serial.println("I received: " + (String)Input);
+          Serial.println("Servo top position set: " + (String)posS2);
+          Serial.println("Servo top position: " + (String)currentPosS2);
+          break;
+        case 119:
+          Input = 'w';
+          if(posS2 >= 45)
+            posS2 = 30;
+          posS2 +=15;
+          servo_top.write(posS2);
+          currentPosS2 = servo_top.read();
+          Serial.println("I received: " + (String)Input);
+          Serial.println("Servo top position set: " + (String)posS2);
+          Serial.println("Servo top position: " + (String)currentPosS2);
+          break;
+        case 120:
+          Input = 'x';
+          Serial.println("I received: " + (String)Input);
+          Serial.println("Reset servo to default position");
+          servo_bottom.write(posS1i);
+          servo_top.write(posS2i);
+          posS1 = 90;
+          posS2 = 0;
+          currentPosS1 = servo_bottom.read();
+          currentPosS2 = servo_top.read();
+          break;
+        default:
+          incomingByte = 0;
+      }
+  
+      //Control the LEDs
+      if(currentPosS2 < 45)
+      {
+        digitalWrite(3, LOW);
+        digitalWrite(4, LOW);
+//        digitalWrite(5, LOW);
+      }
+      else if(currentPosS2 >= 45)
+      {
+        digitalWrite(3, HIGH);
+        digitalWrite(4, HIGH);
+//        digitalWrite(5, LOW);
+      }
+    }
   }
   else
     Serial.println("Only 1 & 2 numbers are allowed");
