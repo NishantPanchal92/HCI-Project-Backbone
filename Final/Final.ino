@@ -229,6 +229,6 @@ void loop()
     }
   }
   else
-    Serial.println("Only 1 & 2 numbers are allowed");
+    Serial.println("Only 1 & 2 numbers are allowed. \n PLEASE REUPLOAD THE PROJECT.");
 }
 
