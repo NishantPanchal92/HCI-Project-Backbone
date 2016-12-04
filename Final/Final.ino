@@ -27,16 +27,23 @@ void setup()
   servo_top.write(posS2i);
 
   //Setup the LEDs at respective pins
-  pinMode(2, OUTPUT);
-  pinMode(3, OUTPUT);
-  pinMode(4, OUTPUT);
-  pinMode(5, OUTPUT);
+  pinMode(2, OUTPUT);  //BASE
+  pinMode(3, OUTPUT);  //BASE
+  pinMode(4, OUTPUT);  //BASE
+  pinMode(5, OUTPUT);  //CHARACTER / red
+  pinMode(6, OUTPUT);  //CHARACTER / blue
+  pinMode(7, OUTPUT);  //green
 
   //Select what you want to work with
   Serial.println("Please select 1-Structure or 2-Character");
   while(Serial.available() <= 0) {}
   structure = Serial.read();
-  digitalWrite(2, HIGH);
+  
+  // WHITE: 2-LOW 3-HIGH 4-LOW
+  digitalWrite(2, LOW);
+  digitalWrite(3, HIGH);
+  digitalWrite(4, LOW); 
+  
   Serial.println("Setup Complete!");
 }
 
@@ -67,8 +74,8 @@ void loop()
         case 97:
           Input = 'a';
           if(posS1 >= 180)
-            posS1 = 170;
-          posS1 +=10;
+            posS1 = 160;
+          posS1 +=20;
           servo_bottom.write(posS1);
           currentPosS1 = servo_bottom.read();
           Serial.println("I received: " + (String)Input);
@@ -77,8 +84,8 @@ void loop()
         case 100:
           Input = 'd';
           if(posS1 <= 0)
-            posS1 = 10;
-          posS1 -=10;
+            posS1 = 20;
+          posS1 -=20;
           servo_bottom.write(posS1);
           currentPosS1 = servo_bottom.read();
           Serial.println("I received: " + (String)Input);
@@ -87,8 +94,8 @@ void loop()
         case 115:
           Input = 's';
           if(posS2 <= 0)
-            posS2 = 15;
-          posS2 -=15;
+            posS2 = 20;
+          posS2 -=20;
           servo_top.write(posS2);
           currentPosS2 = servo_top.read();
           Serial.println("I received: " + (String)Input);
@@ -97,9 +104,9 @@ void loop()
           break;
         case 119:
           Input = 'w';
-          if(posS2 >= 45)
-            posS2 = 30;
-          posS2 +=15;
+          if(posS2 >= 60)
+            posS2 = 40;
+          posS2 +=20;
           servo_top.write(posS2);
           currentPosS2 = servo_top.read();
           Serial.println("I received: " + (String)Input);
@@ -124,27 +131,15 @@ void loop()
       //Control the LEDs
       if(currentPosS2 == 0)
       {
-        digitalWrite(3, LOW);
-        digitalWrite(4, LOW);
         digitalWrite(5, LOW);
+        digitalWrite(6, LOW);
+        digitalWrite(7, LOW);
       }
-      if(currentPosS2 == 15)
+      if(currentPosS2 == 20)
       {
-        digitalWrite(3, LOW);
-        digitalWrite(4, LOW);
-        digitalWrite(5, HIGH);
-      }
-      else if(currentPosS2 == 30)
-      {
-        digitalWrite(3, LOW);
-        digitalWrite(4, HIGH);
         digitalWrite(5, LOW);
-      }
-      else if(currentPosS2 == 45)
-      {
-        digitalWrite(3, HIGH);
-        digitalWrite(4, LOW);
-        digitalWrite(5, LOW);
+        digitalWrite(6, HIGH); //White wire
+        digitalWrite(7, LOW);
       }
     }
   }
@@ -159,8 +154,8 @@ void loop()
         case 97:
           Input = 'a';
           if(posS1 >= 180)
-            posS1 = 170;
-          posS1 +=10;
+            posS1 = 160;
+          posS1 +=20;
           servo_bottom.write(posS1);
           currentPosS1 = servo_bottom.read();
           Serial.println("I received: " + (String)Input);
@@ -169,8 +164,8 @@ void loop()
         case 100:
           Input = 'd';
           if(posS1 <= 0)
-            posS1 = 10;
-          posS1 -=10;
+            posS1 = 20;
+          posS1 -=20;
           servo_bottom.write(posS1);
           currentPosS1 = servo_bottom.read();
           Serial.println("I received: " + (String)Input);
@@ -179,8 +174,8 @@ void loop()
         case 115:
           Input = 's';
           if(posS2 <= 0)
-            posS2 = 15;
-          posS2 -=15;
+            posS2 = 20;
+          posS2 -=20;
           servo_top.write(posS2);
           currentPosS2 = servo_top.read();
           Serial.println("I received: " + (String)Input);
@@ -189,9 +184,9 @@ void loop()
           break;
         case 119:
           Input = 'w';
-          if(posS2 >= 45)
-            posS2 = 30;
-          posS2 +=15;
+          if(posS2 >= 60)
+            posS2 = 40;
+          posS2 +=20;
           servo_top.write(posS2);
           currentPosS2 = servo_top.read();
           Serial.println("I received: " + (String)Input);
@@ -214,17 +209,15 @@ void loop()
       }
   
       //Control the LEDs
-      if(currentPosS2 < 45)
+      if(currentPosS2 < 60)
       {
-        digitalWrite(3, LOW);
-        digitalWrite(4, LOW);
-//        digitalWrite(5, LOW);
+        digitalWrite(5, LOW);
+        digitalWrite(6, LOW);
       }
-      else if(currentPosS2 >= 45)
+      else if(currentPosS2 >= 60)
       {
-        digitalWrite(3, HIGH);
-        digitalWrite(4, HIGH);
-//        digitalWrite(5, LOW);
+        digitalWrite(5, HIGH);
+        digitalWrite(6, HIGH);
       }
     }
   }
